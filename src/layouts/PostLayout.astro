@@ -1,0 +1,47 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  summary?: string;
+  date: Date;
+  dateLabel?: string;
+  cover?: import('astro').ImageMetadata;
+  coverAlt?: string;
+  tags?: string[];
+}
+
+const { title, summary, date, dateLabel, cover, coverAlt = '', tags = [] } = Astro.props;
+
+const formattedDate =
+  dateLabel ??
+  date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<BaseLayout title={`${title} · Portfolio`} description={summary ?? title}>
+  <div class="container section entry">
+    <a class="back-link" href="/posts/">&larr; Posts</a>
+
+    <header class="entry-header">
+      <p class="eyebrow">{formattedDate}</p>
+      <h1>{title}</h1>
+      {tags.length > 0 && (
+        <div class="card__tags" style="margin-bottom: 1.5rem;">
+          {tags.map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    {cover && <Image class="entry-cover" src={cover} alt={coverAlt} width={1200} height={675} />}
+
+    <div class="entry-content">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>

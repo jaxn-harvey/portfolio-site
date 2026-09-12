@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import DirectoryCard from '../components/DirectoryCard.astro';
+import { Image } from 'astro:assets';
+import { site, sections } from '../data/site';
+
+// Resolves a plain filename (site.profileImage, section.image) to an
+// optimizable asset. Astro can't import a variable path directly, so
+// import.meta.glob loads every image in src/assets/ up front and we look
+// up the one we need by filename.
+const assetImages = import.meta.glob<{ default: import('astro').ImageMetadata }>(
+  '/src/assets/*.{jpeg,jpg,png,webp,avif,gif,svg}',
+  { eager: true },
+);
+const resolveAsset = (filename?: string) =>
+  filename ? assetImages[`/src/assets/${filename}`]?.default : undefined;
+
+const profileImage = resolveAsset(site.profileImage);
+---
+
+<BaseLayout title={`${site.name} · ${site.tagline}`} description={site.about}>
+  <section class="container section hero">
+    <div>
+      <div class="hero__intro">
+        {profileImage && (
+          <Image class="hero__avatar" src={profileImage} alt={site.name} width={200} height={200} />
+        )}
+        <div>
+          <p class="eyebrow">{site.tagline}</p>
+          <h1>{site.name}</h1>
+        </div>
+      </div>
+      <p>{site.about}</p>
+      <a class="btn btn--primary" href="#work">See the work &darr;</a>
+    </div>
+
+    {site.reelYoutubeId && (
+      <VideoEmbed youtubeId={site.reelYoutubeId} title={`${site.name} — Reel`} />
+    )}
+  </section>
+
+  <section class="container section section--tight" id="work">
+    <h2>Portfolio</h2>
+    <div class="card-grid">
+      {sections.map((s) => (
+        <DirectoryCard href={s.href} title={s.title} description={s.description} image={resolveAsset(s.image)} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

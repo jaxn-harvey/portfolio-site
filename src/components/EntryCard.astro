@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  cover: import('astro').ImageMetadata;
+  coverAlt: string;
+  tags?: string[];
+}
+
+const { href, title, summary, cover, coverAlt, tags = [] } = Astro.props;
+---
+
+<a class="card" href={href}>
+  <div class="card__media">
+    <Image src={cover} alt={coverAlt} width={480} height={360} loading="lazy" />
+  </div>
+  <div class="card__body">
+    <h3 class="card__title">{title}</h3>
+    <p class="card__summary">{summary}</p>
+    {tags.length > 0 && (
+      <div class="card__tags">
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    )}
+  </div>
+</a>

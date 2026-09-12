@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import { sections } from '../../data/site';
+
+const section = sections.find((s) => s.slug === 'physical-work')!;
+
+const entries = (await getCollection('physical-work', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout title={section.title} description={section.description}>
+  <section class="container section">
+    <p class="eyebrow">Portfolio</p>
+    <h1>{section.title}</h1>
+    <p>{section.description}</p>
+
+    {entries.length > 0 ? (
+      <div class="card-grid">
+        {entries.map((entry) => (
+          <EntryCard
+            href={`/physical-work/${entry.id}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            cover={entry.data.cover}
+            coverAlt={entry.data.coverAlt}
+            tags={entry.data.tags}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">No entries yet. Add a Markdown file to src/content/physical-work/.</p>
+    )}
+  </section>
+</BaseLayout>

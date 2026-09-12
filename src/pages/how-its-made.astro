@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="How This Site Was Made" description="A short explanation for the creation of this site.">
+  <section class="container section entry">
+    <p class="eyebrow">Notes</p>
+    <h1>How this site was made</h1>
+
+    <div class="entry-content">
+      <!-- Edit this page directly — it's just plain content, same as About. -->
+      <p>
+      In the interest of transparency, I would like to note that this site was created with the
+      help of Claude. The work and its descriptions are my own; however, the Astro framework and site structure are
+      assembled with Claude's aid. The following rundown is Claude's summary.
+      </p>
+      <p>
+        <i>"This site is built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>,
+        a framework that outputs plain static HTML/CSS/JS — no server to run
+        or maintain.</i>
+      </p>
+      <p>
+        <i>"It's hosted for free on <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a>,
+        served from a custom domain, and rebuilds and redeploys automatically
+        via GitHub Actions on every push.</i>
+      </p>
+      <p>
+        <i>"Videos are embedded from YouTube (unlisted) rather than hosted in the
+        repository. Each portfolio piece and post is a single Markdown file —
+        adding new work is just adding a file, no code changes required."</i>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

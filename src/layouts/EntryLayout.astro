@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import ImageGallery from '../components/ImageGallery.astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  summary: string;
+  date: Date;
+  dateLabel?: string;
+  cover: import('astro').ImageMetadata;
+  coverAlt: string;
+  video?: { youtubeId: string; caption?: string };
+  gallery?: { src: import('astro').ImageMetadata; alt: string }[];
+  tags?: string[];
+  backHref: string;
+  backLabel: string;
+}
+
+const {
+  title,
+  summary,
+  date,
+  dateLabel,
+  cover,
+  coverAlt,
+  video,
+  gallery = [],
+  tags = [],
+  backHref,
+  backLabel,
+} = Astro.props;
+
+const formattedDate =
+  dateLabel ??
+  date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+  });
+---
+
+<BaseLayout title={`${title} · Portfolio`} description={summary}>
+  <div class="container section entry">
+    <a class="back-link" href={backHref}>&larr; {backLabel}</a>
+
+    <header class="entry-header">
+      <p class="eyebrow">{formattedDate}</p>
+      <h1>{title}</h1>
+      <p>{summary}</p>
+      {tags.length > 0 && (
+        <div class="card__tags" style="margin-bottom: 1.5rem;">
+          {tags.map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    {video ? (
+      <VideoEmbed youtubeId={video.youtubeId} title={title} caption={video.caption} />
+    ) : (
+      <Image class="entry-cover" src={cover} alt={coverAlt} width={1200} height={675} />
+    )}
+
+    <ImageGallery images={gallery} />
+
+    <div class="entry-content">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>

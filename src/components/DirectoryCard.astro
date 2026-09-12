@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  image?: import('astro').ImageMetadata;
+}
+
+const { href, title, description, image } = Astro.props;
+---
+
+<a class={`card dir-card ${image ? 'dir-card--image' : ''}`} href={href}>
+  {image && (
+    <Image class="dir-card__bg" src={image} alt="" width={640} height={480} />
+  )}
+  <div class="dir-card__overlay"></div>
+  <div class="dir-card__content">
+    <div class="dir-card__title">
+      <h3 class="card__title">{title}</h3>
+      <span class="dir-card__arrow" aria-hidden="true">&rarr;</span>
+    </div>
+    <p class="card__summary">{description}</p>
+  </div>
+</a>

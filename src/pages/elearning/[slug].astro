@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import EntryLayout from '../../layouts/EntryLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('elearning', ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<EntryLayout
+  title={entry.data.title}
+  summary={entry.data.summary}
+  date={entry.data.date}
+  dateLabel={entry.data.dateLabel}
+  cover={entry.data.cover}
+  coverAlt={entry.data.coverAlt}
+  video={entry.data.video}
+  gallery={entry.data.gallery}
+  tags={entry.data.tags}
+  backHref="/elearning/"
+  backLabel="E-Learning"
+>
+  <Content />
+</EntryLayout>

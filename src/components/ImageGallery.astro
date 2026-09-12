@@ -1,0 +1,63 @@
+---
+import { Image, getImage } from 'astro:assets';
+
+interface GalleryImage {
+  src: import('astro').ImageMetadata;
+  alt: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+}
+
+const { images } = Astro.props;
+
+// Pre-render full-size versions for the lightbox at build time.
+const fullSize = await Promise.all(
+  images.map(async (img) => {
+    const optimized = await getImage({ src: img.src, width: 1800 });
+    return { url: optimized.src, alt: img.alt };
+  }),
+);
+---
+
+{images.length > 0 && (
+  <>
+    <div class="gallery">
+      {images.map((img, i) => (
+        <button class="gallery__item" type="button" data-index={i} aria-label={`Open image: ${img.alt || 'untitled'}`}>
+          <Image src={img.src} alt={img.alt} width={400} height={300} loading="lazy" />
+        </button>
+      ))}
+    </div>
+
+    <dialog class="lightbox" id="entry-lightbox">
+      <img id="entry-lightbox-img" src="" alt="" />
+    </dialog>
+
+    <script type="application/json" id="entry-lightbox-data" set:html={JSON.stringify(fullSize)} />
+
+    <script>
+      const dialog = document.getElementById('entry-lightbox') as HTMLDialogElement | null;
+      const img = document.getElementById('entry-lightbox-img') as HTMLImageElement | null;
+      const dataEl = document.getElementById('entry-lightbox-data');
+      const data = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+
+      document.querySelectorAll('.gallery__item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const index = Number((btn as HTMLElement).dataset.index);
+          const item = data[index];
+          if (item && img && dialog) {
+            img.src = item.url;
+            img.alt = item.alt;
+            dialog.showModal();
+          }
+        });
+      });
+
+      dialog?.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+    </script>
+  </>
+)}

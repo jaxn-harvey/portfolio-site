@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DirectoryCard from '../../components/DirectoryCard.astro';
+import { sections } from '../../data/site';
+
+const section = sections.find((s) => s.slug === 'digital-work')!;
+---
+
+<BaseLayout title="Digital Work" description={section.description}>
+  <section class="container section">
+    <p class="eyebrow">Portfolio</p>
+    <h1>{section.title}</h1>
+    <p>{section.description}</p>
+
+    <div class="card-grid">
+      {section.subsections?.map((sub) => (
+        <DirectoryCard href={sub.href} title={sub.title} description={sub.description} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

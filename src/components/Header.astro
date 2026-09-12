@@ -1,0 +1,48 @@
+---
+import { site, sections } from '../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (path === href ? 'page' : undefined);
+---
+
+<header class="site-header" data-nav-open="false">
+  <div class="container site-header__bar">
+    <a class="site-header__brand" href="/">{site.name}</a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      aria-label="Toggle navigation menu"
+      id="nav-toggle"
+    >
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        <li><a href="/" aria-current={isCurrent('/')}>Home</a></li>
+        {sections.map((s) => (
+          <li><a href={s.href} aria-current={path.startsWith(s.href) ? 'page' : undefined}>{s.title}</a></li>
+        ))}
+        <li><a href="/posts/" aria-current={path.startsWith('/posts/') ? 'page' : undefined}>Posts</a></li>
+        <li><a href="/about/" aria-current={isCurrent('/about/')}>About</a></li>
+        <li><a href="/contact/" aria-current={isCurrent('/contact/')}>Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const header = document.querySelector('.site-header');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = header?.getAttribute('data-nav-open') === 'true';
+    header?.setAttribute('data-nav-open', String(!isOpen));
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+</script>

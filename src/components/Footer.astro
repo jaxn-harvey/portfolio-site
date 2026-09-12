@@ -1,0 +1,20 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__row">
+    <span>&copy; {year} {site.name} · <a href="/how-its-made/">How this site was made</a></span>
+    <span>
+      {site.socials.map((social, i) => (
+        <>
+          <a href={social.url} target="_blank" rel="noopener noreferrer">{social.label}</a>
+          {i < site.socials.length - 1 && ' · '}
+        </>
+      ))}
+      {site.socials.length > 0 && ' · '}
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </span>
+  </div>
+</footer>

@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EntryCard from '../../../components/EntryCard.astro';
+import { sections } from '../../../data/site';
+
+const digitalWork = sections.find((s) => s.slug === 'digital-work')!;
+const sub = digitalWork.subsections!.find((s) => s.slug === 'photography')!;
+
+const entries = (await getCollection('digital-photography', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout title="Photography" description={sub.description}>
+  <section class="container section">
+    <a class="back-link" href={digitalWork.href}>&larr; {digitalWork.title}</a>
+    <p class="eyebrow">Digital Work</p>
+    <h1>{sub.title}</h1>
+    <p>{sub.description}</p>
+
+    {entries.length > 0 ? (
+      <div class="card-grid">
+        {entries.map((entry) => (
+          <EntryCard
+            href={`/digital-work/photography/${entry.id}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            cover={entry.data.cover}
+            coverAlt={entry.data.coverAlt}
+            tags={entry.data.tags}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">No photography entries yet. Add a Markdown file to src/content/digital-work/photography/.</p>
+    )}
+  </section>
+</BaseLayout>
