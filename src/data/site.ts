@@ -2,7 +2,7 @@
 export const site = {
   name: 'Jackson Harvey',
   tagline: 'Tech + Design',
-  about: `I'm a creator working in the intersection between technology, traditional
+  about: `I'm a creator in the intersection between technology, traditional
   craft, and instructional design. This site showcases my work as a learner and a professional.`,
   // YouTube video ID for the homepage reel, e.g. "dQw4w9WgXcQ" from
   // https://www.youtube.com/watch?v=dQw4w9WgXcQ. Leave empty to hide the reel.
@@ -11,7 +11,7 @@ export const site = {
   // in src/assets/ (not a subfolder). Astro optimizes it automatically at
   // build time. Set to '' to hide it.
   profileImage: 'jharvey2.jpeg',
-  email: 'jxinkling@gmail.com',
+  email: 'jacksonian.era23@gmail.com',
   socials: [
     // { label: 'Instagram', url: 'https://instagram.com/yourhandle' },
     // { label: 'LinkedIn', url: 'https://linkedin.com/in/yourhandle' },

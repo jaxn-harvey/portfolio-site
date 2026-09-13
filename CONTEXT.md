@@ -48,10 +48,10 @@ inaccurate (this is a current-state log, not just an append-only history).
 - **Deployment**: `.github/workflows/deploy.yml` builds and deploys to GitHub
   Pages via `actions/upload-pages-artifact` + `actions/deploy-pages` on every
   push to `main`. Repo's GitHub Pages source must be set to "GitHub Actions"
-  (one-time setup, documented in README.md).
+  (one-time setup, documented in GUIDE.md).
 - **Domain**: `public/CNAME` holds `jiharvey.com`. DNS is managed in Wix's
   domain dashboard (A/AAAA records pointed at GitHub Pages IPs) — full
-  instructions in README.md.
+  instructions in GUIDE.md.
 
 ## Current site structure
 
@@ -66,6 +66,26 @@ inaccurate (this is a current-state log, not just an append-only history).
 - `/how-its-made/` (linked from the footer, not the main nav)
 
 ## Change log
+
+### 2026-09-14 — README/GUIDE split; email change; verified Wix/DNS steps
+- Renamed the old `README.md` (full maintenance instructions) to
+  `GUIDE.md`. Wrote a new, short `README.md` that briefly describes the
+  site and links to `GUIDE.md` (how-to) and this file (why). Anywhere
+  future work references "the README" for setup/maintenance instructions,
+  it means `GUIDE.md` now.
+- Changed the site's contact email from `jxinkling@gmail.com` to
+  `jacksonian.era23@gmail.com` in `src/data/site.ts` (the only place it was
+  defined — Contact page and footer both pull from there).
+- Verified the Wix/GitHub Pages DNS instructions in `GUIDE.md` against
+  GitHub's current official docs: the four A-record IPs and four AAAA IPs
+  are correct as documented, and the Settings → Pages → Build and
+  deployment → Source → "GitHub Actions" navigation is still accurate.
+  Strengthened the domain section with two things GitHub's docs surfaced
+  that weren't previously called out: (1) *any* leftover record on `@`
+  beyond the four A records (not just the obvious default one) blocks
+  certificate issuance, and (2) a CAA record restricting certificate
+  authorities (if one exists at all — most domains have none) must allow
+  `letsencrypt.org` or GitHub can't provision HTTPS.
 
 ### 2026-09-12 — Sticky footer fix
 - Bug: on any page shorter than the viewport (e.g. `/digital-work/`,
