@@ -93,7 +93,11 @@ sorted newest-first automatically on `/posts/`.
 - `src/pages/about.astro` — edit the text directly in the file.
 - `src/pages/contact.astro` — pulls your email and social links from
   `src/data/site.ts` automatically; add socials there rather than editing
-  this page.
+  this page. Each entry is `{ label, url, icon? }` — `icon` is optional and
+  shows a small icon next to the label (in both the Contact page and the
+  footer); omit it for a text-only link. Available icons are the keys in
+  `src/components/SocialIcon.astro` (currently just `'linkedin'` — add more
+  by adding a key + SVG path there, self-hosted, no icon-font CDN needed).
 
 ### Adding a contact form (optional)
 

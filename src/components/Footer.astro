@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site';
+import SocialIcon from './SocialIcon.astro';
 const year = new Date().getFullYear();
 ---
 
@@ -9,7 +10,10 @@ const year = new Date().getFullYear();
     <span>
       {site.socials.map((social, i) => (
         <>
-          <a href={social.url} target="_blank" rel="noopener noreferrer">{social.label}</a>
+          <a class="social-link" href={social.url} target="_blank" rel="noopener noreferrer">
+            {social.icon && <SocialIcon icon={social.icon} />}
+            {social.label}
+          </a>
           {i < site.socials.length - 1 && ' · '}
         </>
       ))}

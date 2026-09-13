@@ -67,6 +67,33 @@ inaccurate (this is a current-state log, not just an append-only history).
 
 ## Change log
 
+### 2026-09-14 — Social link styling fix + Contact page redesign
+- Bug: `.social-link` (icon + label) was `display: inline-flex` with no
+  `vertical-align` set, sitting inside plain running text (footer, and the
+  old "Or find me on X, Y." sentence on Contact). An inline-flex box's
+  baseline alignment with surrounding text is ambiguous/inconsistent across
+  browsers when its children aren't baseline-aligned internally — looked
+  like the icon+label were "raised" relative to neighboring text. Fixed
+  with explicit `vertical-align: middle` on `.social-link`, and removed the
+  default underline in favor of an underline-on-hover only (an underlined
+  flex container was rendering oddly around the icon too).
+- Contact page (`src/pages/contact.astro`) no longer runs socials into a
+  sentence — each one (plus email) is now its own full-width `.btn` in a
+  stacked `.contact-links` column, matching the visual weight the email
+  button already had. Footer's presentation is unchanged (icon + inline
+  text, appropriate for a slim footer bar) — the "own line, more prominent"
+  request was scoped to Contact specifically.
+
+### 2026-09-14 — Self-hosted social icons
+- Added `src/components/SocialIcon.astro` (inline SVG, one icon so far:
+  `linkedin`) and an optional `icon` field on `site.socials` entries in
+  `site.ts`, rendered in both `Footer.astro` and `contact.astro`.
+- Deliberately not Font Awesome (or any icon-font CDN) — user pasted a
+  Font Awesome `<i class="fa-brands ...">` snippet, but pulling in a whole
+  icon library for one icon conflicts with this project's established
+  self-hosted-only approach (see the Montserrat font decision above). Used
+  a plain inline SVG instead, same visual result, zero extra requests.
+
 ### 2026-09-14 — README/GUIDE split; email change; verified Wix/DNS steps
 - Renamed the old `README.md` (full maintenance instructions) to
   `GUIDE.md`. Wrote a new, short `README.md` that briefly describes the

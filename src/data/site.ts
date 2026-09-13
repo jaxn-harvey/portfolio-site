@@ -12,9 +12,11 @@ export const site = {
   // build time. Set to '' to hide it.
   profileImage: 'jharvey2.jpeg',
   email: 'jacksonian.era23@gmail.com',
+  // `icon` is optional — matches a key in src/components/SocialIcon.astro.
+  // Omit it to show just the text label, no icon.
   socials: [
     // { label: 'Instagram', url: 'https://instagram.com/yourhandle' },
-    // { label: 'LinkedIn', url: 'https://linkedin.com/in/yourhandle' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/jackson-harvey-19157027b/', icon: 'linkedin' },
   ],
 };
 
