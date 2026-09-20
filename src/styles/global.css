@@ -790,6 +790,11 @@ main {
   color: var(--color-text-muted);
 }
 
+/* ---------- Text alignment utilities (for use in Markdown content) ---------- */
+.text-center {
+  text-align: center;
+}
+
 /* ---------- Empty state ---------- */
 .empty-state {
   border: 1px dashed var(--color-border);
