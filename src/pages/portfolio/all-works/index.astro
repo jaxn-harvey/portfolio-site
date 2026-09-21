@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EntryCard from '../../../components/EntryCard.astro';
+import { allWorksCard } from '../../../data/site';
+
+// Every portfolio collection, and where its entries live once built —
+// combined here into one date-sorted feed. Posts (the blog) intentionally
+// isn't included; this is portfolio work only.
+const collections = [
+  { name: 'digital-photography', hrefPrefix: '/digital-work/photography/' },
+  { name: 'digital-media', hrefPrefix: '/digital-work/digital-media/' },
+  { name: 'elearning', hrefPrefix: '/digital-work/elearning/' },
+  { name: 'physical-work', hrefPrefix: '/physical-work/' },
+] as const;
+
+const allEntries = (
+  await Promise.all(
+    collections.map(async ({ name, hrefPrefix }) => {
+      const entries = await getCollection(name, ({ data }) => !data.draft);
+      return entries.map((entry) => ({ entry, hrefPrefix }));
+    }),
+  )
+).flat();
+
+allEntries.sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
+---
+
+<BaseLayout title={allWorksCard.title} description={allWorksCard.description}>
+  <section class="container section">
+    <a class="back-link" href="/portfolio/">&larr; Portfolio</a>
+    <p class="eyebrow">Portfolio</p>
+    <h1>{allWorksCard.title}</h1>
+    <p>{allWorksCard.description}</p>
+
+    {allEntries.length > 0 ? (
+      <div class="card-grid">
+        {allEntries.map(({ entry, hrefPrefix }) => (
+          <EntryCard
+            href={`${hrefPrefix}${entry.id}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            cover={entry.data.cover}
+            coverAlt={entry.data.coverAlt}
+            tags={entry.data.tags}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">No entries yet.</p>
+    )}
+  </section>
+</BaseLayout>

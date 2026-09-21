@@ -3,18 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
 import DirectoryCard from '../components/DirectoryCard.astro';
 import { Image } from 'astro:assets';
-import { site, sections } from '../data/site';
-
-// Resolves a plain filename (site.profileImage, section.image) to an
-// optimizable asset. Astro can't import a variable path directly, so
-// import.meta.glob loads every image in src/assets/ up front and we look
-// up the one we need by filename.
-const assetImages = import.meta.glob<{ default: import('astro').ImageMetadata }>(
-  '/src/assets/*.{jpeg,jpg,png,webp,avif,gif,svg}',
-  { eager: true },
-);
-const resolveAsset = (filename?: string) =>
-  filename ? assetImages[`/src/assets/${filename}`]?.default : undefined;
+import { site, sections, allWorksCard } from '../data/site';
+import { resolveAsset } from '../utils/images';
 
 const profileImage = resolveAsset(site.profileImage);
 ---
@@ -43,6 +33,7 @@ const profileImage = resolveAsset(site.profileImage);
   <section class="container section section--tight" id="work">
     <h2>Portfolio</h2>
     <div class="card-grid">
+      <DirectoryCard href={allWorksCard.href} title={allWorksCard.title} description={allWorksCard.description} />
       {sections.map((s) => (
         <DirectoryCard href={s.href} title={s.title} description={s.description} image={resolveAsset(s.image)} />
       ))}

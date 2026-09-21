@@ -11,11 +11,15 @@ inaccurate (this is a current-state log, not just an append-only history).
 - Static site on **GitHub Pages**, served from a custom domain (`jiharvey.com`,
   purchased via Wix — only the DNS is pointed at GitHub Pages; hosting itself
   doesn't use Wix).
-- Sections: **Digital Work** (with **Photography** and **Digital Media**
-  subsections), **Physical Work**, **E-Learning** — each holding "entry
-  modules" that support a video or image, a gallery, and a description.
-- Later added: **Posts** (lightweight blog-style updates), **About**,
-  **Contact**, and a **"How this site was made"** page linked from the footer.
+- Portfolio sections, all under a **Portfolio** nav item: **Digital Work**
+  (with **Photography**, **Digital Media**, and **E-Learning** subsections)
+  and **Physical Work**, plus a computed **All Works** feed combining every
+  entry from all four. Each entry is an "entry module" supporting a video or
+  image, a gallery, and a description.
+- Later added: **Blog** (lightweight updates, was called "Posts" — renamed;
+  deliberately *not* under Portfolio/All Works, a separate top-level
+  section), **About**, **Contact**, and a **"How this site was made"** page
+  linked from the footer.
 - Fully responsive, with real hover/interaction polish (card lift, nav
   underline, mobile full-screen menu, image lightbox).
 - Easy ongoing maintenance: adding a new piece of work should mean adding one
@@ -30,15 +34,20 @@ inaccurate (this is a current-state log, not just an append-only history).
 - **Content collections** (`src/content.config.ts`) — one collection per
   section/subsection (`digital-photography`, `digital-media`, `physical-work`,
   `elearning`, `posts`). Portfolio entries require a cover image; posts are a
-  lighter schema (no mandatory image).
+  lighter schema (no mandatory image). Collection names are internal — they
+  don't have to (and in two cases don't) match the public URL: `elearning`
+  routes to `/digital-work/elearning/`, and `posts` routes to `/blog/`.
 - **Images**: content-collection entries use Astro's `image()` schema helper
   (auto-optimized, colocated with the Markdown file). Singleton images
   referenced from the plain data file `src/data/site.ts` (profile photo,
-  homepage section-card photos) can't use that helper, so instead:
-  `src/pages/index.astro` uses `import.meta.glob('/src/assets/*.{...}', {eager:true})`
-  to build a filename → asset map, and `site.ts` just stores a bare filename.
-  Convention: these singleton images must live directly in `src/assets/`
-  (not a subfolder).
+  section/subsection card photos) can't use that helper, so instead:
+  `src/utils/images.ts` exports `resolveAsset()`, built on
+  `import.meta.glob('/src/assets/*.{...}', {eager:true})` to build a
+  filename → asset map; `site.ts` just stores a bare filename. Convention:
+  these singleton images must live directly in `src/assets/` (not a
+  subfolder). Originally this glob lived inline in `index.astro`; extracted
+  to a shared util once `portfolio/index.astro` and `digital-work/index.astro`
+  needed the same lookup (see 2026-09-21 entry).
 - **Videos**: YouTube only, embedded via `youtube-nocookie.com`, uploaded as
   **Unlisted** by the user. Never hosted in the repo (GitHub Pages isn't
   suited to large media, YouTube's free tier has no practical limits).
@@ -56,16 +65,84 @@ inaccurate (this is a current-state log, not just an append-only history).
 ## Current site structure
 
 - `/` — hero (profile photo + name/tagline/about + optional video reel),
-  directory cards linking to the three portfolio sections.
-- `/digital-work/` → `/digital-work/photography/`, `/digital-work/digital-media/`
-- `/physical-work/`
-- `/elearning/`
-- `/posts/` (list) → `/posts/<slug>/` (detail)
+  directory cards: All Works, Digital Work, Physical Work.
+- `/portfolio/` — same three cards as home, as a dedicated nav destination.
+  - `/portfolio/all-works/` — every entry from all four portfolio
+    collections below, merged and sorted by date. Not content-backed itself.
+  - `/digital-work/` → `/digital-work/photography/`, `/digital-work/digital-media/`,
+    `/digital-work/elearning/`
+  - `/physical-work/`
+- `/blog/` (list) → `/blog/<slug>/` (detail) — top-level, not under Portfolio.
 - `/about/`
 - `/contact/`
 - `/how-its-made/` (linked from the footer, not the main nav)
 
+Top nav is just Home / Portfolio / Blog / About / Contact — Digital Work,
+Physical Work, and All Works are reached via the Portfolio overview page,
+not listed individually in the nav (same pattern Digital Work's subsections
+already used). `Header.astro`'s active-state logic treats any path under
+`/portfolio/`, `/digital-work/`, or `/physical-work/` as "Portfolio active."
+
 ## Change log
+
+### 2026-09-21 — Consolidated "All Works" card text
+- Bug (from the IA restructuring below): the "All Works" card's title/
+  description were hardcoded independently in three places
+  (`index.astro`, `portfolio/index.astro`, `portfolio/all-works/index.astro`)
+  since it's not a content-backed `Section` like the others. User edited one
+  copy expecting it to update everywhere, and the other two silently didn't
+  — by the time this was fixed the three copies had drifted to three
+  different wordings.
+- Fix: added `allWorksCard` (`{ title, description, href }`) to `site.ts`,
+  same file as `sections`. All three pages now reference it instead of
+  their own literal strings. One edit, updates everywhere — matches how
+  `sections` already worked for every other card.
+
+### 2026-09-21 — IA restructuring: Portfolio umbrella, All Works, Blog rename
+- Introduced a **Portfolio** top-level nav item/page (`/portfolio/`) as an
+  umbrella over what were three separate top-level sections. Under it:
+  - **All Works** (`/portfolio/all-works/`) — new, a computed feed merging
+    `digital-photography` + `digital-media` + `elearning` + `physical-work`,
+    sorted by `date` descending. No content of its own.
+  - **Digital Work** (unchanged URL `/digital-work/`) — gained a third
+    subsection.
+  - **Physical Work** (unchanged URL `/physical-work/`).
+- **E-Learning demoted from a top-level section to a Digital Work
+  subsection**, alongside Photography and Digital Media. Content folder
+  (`src/content/elearning/`) and collection name (`elearning`) deliberately
+  left unchanged — only the *pages* moved, from `src/pages/elearning/` to
+  `src/pages/digital-work/elearning/`, changing the public URL from
+  `/elearning/` to `/digital-work/elearning/`. Its existing `image` (the
+  Instructional Media Timeline photo) was preserved by extending the
+  `Subsection` type in `site.ts` to support `image?`, previously only a
+  top-level `Section` feature — `/digital-work/index.astro` now passes
+  subsection images through to their cards too.
+- **"Posts" renamed to "Blog"** in nav label and page title, and the route
+  moved from `/posts/` to `/blog/` (`src/pages/posts/` → `src/pages/blog/`).
+  The content collection is still named/folder `posts` — only routing and
+  display text changed, so no content files needed to move. Blog is
+  deliberately *not* part of Portfolio/All Works (a separate top-level
+  section) — a conscious choice, not an oversight, per the request.
+- Nav (`Header.astro`) simplified from 7 items to 5 (Home / Portfolio /
+  Blog / About / Contact) — Digital Work, Physical Work, and E-Learning are
+  no longer listed individually in the top nav, reached via `/portfolio/`
+  instead, mirroring how Digital Work's own subsections were already
+  reached via `/digital-work/` rather than being in the nav directly.
+  Active-nav-state logic now treats `/portfolio/`, `/digital-work/`, and
+  `/physical-work/` paths as all meaning "Portfolio is active."
+- Extracted the `import.meta.glob` image-resolver (previously inline in
+  `index.astro`) into `src/utils/images.ts` (`resolveAsset()`), since it's
+  now needed in three places (`index.astro`, `portfolio/index.astro`,
+  `digital-work/index.astro`).
+- No redirects were set up for the old `/elearning/` and `/posts/` URLs —
+  the site is new enough that this wasn't judged worth the complexity, but
+  worth knowing if either URL turns out to be linked/indexed somewhere.
+- Verified via build (old routes gone from `dist/`, new ones present),
+  and in-browser: nav, `/portfolio/`, `/portfolio/all-works/` (correct
+  entries, correct sort order, correct per-item hrefs across all four
+  collections), `/digital-work/` (3 subsections incl. E-Learning's photo),
+  the moved E-Learning detail page, `/blog/` (list + detail, back-link
+  text), and mobile nav.
 
 ### 2026-09-14 — Social link styling fix + Contact page redesign
 - Bug: `.social-link` (icon + label) was `display: inline-flex` with no

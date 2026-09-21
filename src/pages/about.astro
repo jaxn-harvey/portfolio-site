@@ -1,21 +1,37 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 import { site } from '../data/site';
+import { resolveAsset } from '../utils/images';
+
+const profileImage = resolveAsset(site.profileImage);
 ---
 
 <BaseLayout title="About" description={`About ${site.name}.`}>
   <section class="container section entry">
-    <p class="eyebrow">About</p>
-    <h1>{site.name}</h1>
+    <div class="hero__intro">
+      {profileImage && (
+        <Image class="hero__avatar" src={profileImage} alt={site.name} width={200} height={200} />
+      )}
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>{site.name}</h1>
+      </div>
+    </div>
 
     <div class="entry-content">
       <!-- Edit this page directly to write your bio. -->
-      <p>
+     <!-- <p>
         {site.about}
-      </p>
+      </p>-->
       <p>
-        Feel free to browse through the different categories of my work.
+        Welcome to my portfolio site. I'm a creator and aspiring instructional designer who 
+        enjoys learning new mediums. I've tried my hand at photography, 3-D modeling, animation,
+        ceramics, web design, and more!
       </p>
+      <p>I work as a web developer at the University of North Alabama where I earned my undergraduate degree
+      in IT and where I am currently pursuing graduate studies in Instruction Technology and Design.</p>
+      <p>Want to connect? Find me on <a href="https://www.linkedin.com/in/jackson-harvey-19157027b/" target="_blank">LinkedIn.</a></p>
     </div>
   </section>
 </BaseLayout>

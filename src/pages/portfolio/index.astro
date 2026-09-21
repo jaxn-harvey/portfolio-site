@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DirectoryCard from '../../components/DirectoryCard.astro';
+import { sections, allWorksCard } from '../../data/site';
+import { resolveAsset } from '../../utils/images';
+---
+
+<BaseLayout title="Portfolio" description="You may view all projects or specific project categories.">
+  <section class="container section">
+    <p class="eyebrow">Portfolio</p>
+    <h1>Portfolio</h1>
+    <p>View all projects or browse by category.</p>
+
+    <div class="card-grid">
+      <DirectoryCard href={allWorksCard.href} title={allWorksCard.title} description={allWorksCard.description} />
+      {sections.map((s) => (
+        <DirectoryCard href={s.href} title={s.title} description={s.description} image={resolveAsset(s.image)} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -13,6 +13,7 @@ const entries = (await getCollection('physical-work', ({ data }) => !data.draft)
 
 <BaseLayout title={section.title} description={section.description}>
   <section class="container section">
+    <a class="back-link" href="/portfolio/">&larr; Portfolio</a>
     <p class="eyebrow">Portfolio</p>
     <h1>{section.title}</h1>
     <p>{section.description}</p>

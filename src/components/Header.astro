@@ -1,8 +1,12 @@
 ---
-import { site, sections } from '../data/site';
+import { site } from '../data/site';
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => (path === href ? 'page' : undefined);
+// Digital Work / Physical Work / the All Works feed all live under the
+// Portfolio nav item, so any of those paths should show Portfolio as active.
+const isPortfolioActive =
+  path.startsWith('/portfolio/') || path.startsWith('/digital-work/') || path.startsWith('/physical-work/');
 ---
 
 <header class="site-header" data-nav-open="false">
@@ -25,10 +29,8 @@ const isCurrent = (href: string) => (path === href ? 'page' : undefined);
     <nav class="site-nav" id="site-nav" aria-label="Primary">
       <ul class="site-nav__list">
         <li><a href="/" aria-current={isCurrent('/')}>Home</a></li>
-        {sections.map((s) => (
-          <li><a href={s.href} aria-current={path.startsWith(s.href) ? 'page' : undefined}>{s.title}</a></li>
-        ))}
-        <li><a href="/posts/" aria-current={path.startsWith('/posts/') ? 'page' : undefined}>Posts</a></li>
+        <li><a href="/portfolio/" aria-current={isPortfolioActive ? 'page' : undefined}>Portfolio</a></li>
+        <li><a href="/blog/" aria-current={path.startsWith('/blog/') ? 'page' : undefined}>Blog</a></li>
         <li><a href="/about/" aria-current={isCurrent('/about/')}>About</a></li>
         <li><a href="/contact/" aria-current={isCurrent('/contact/')}>Contact</a></li>
       </ul>

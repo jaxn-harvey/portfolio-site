@@ -5,13 +5,20 @@ on GitHub Pages, served from your own domain (`jiharvey.com`).
 
 ## Site structure
 
-- **Home** (`/`) — about blurb, optional video reel, links to each section.
-- **Digital Work** (`/digital-work/`) — directory page linking to two subsections:
-  - **Photography** (`/digital-work/photography/`)
-  - **Digital Media** (`/digital-work/digital-media/`)
-- **Physical Work** (`/physical-work/`)
-- **E-Learning** (`/elearning/`)
-- **Posts** (`/posts/`) — simple blog-style updates/news, listed newest first.
+- **Home** (`/`) — about blurb, optional video reel, links into Portfolio.
+- **Portfolio** (`/portfolio/`) — directory page linking to:
+  - **All Works** (`/portfolio/all-works/`) — every portfolio entry from
+    every category below, combined into one feed sorted newest-first. This
+    page has no content of its own — it's computed at build time from the
+    other four collections.
+  - **Digital Work** (`/digital-work/`) — directory page linking to three
+    subsections:
+    - **Photography** (`/digital-work/photography/`)
+    - **Digital Media** (`/digital-work/digital-media/`)
+    - **E-Learning** (`/digital-work/elearning/`)
+  - **Physical Work** (`/physical-work/`)
+- **Blog** (`/blog/`) — simple blog-style updates/news, listed newest first.
+  (Not part of Portfolio/All Works — it's a separate top-level section.)
 - **About** (`/about/`) — a short static bio page.
 - **Contact** (`/contact/`) — email + social links, no form (keeps the site
   100% static/free — see "Adding a contact form" below if you want one later).
@@ -19,19 +26,26 @@ on GitHub Pages, served from your own domain (`jiharvey.com`).
 Each portfolio section/subsection lists "entry modules" as cards; clicking
 one opens a full detail page with a video or cover image, an optional image
 gallery (with a click-to-zoom lightbox), and a full Markdown description.
-Posts use a lighter version of the same pattern — no mandatory image, just a
-title, date, and Markdown body.
+Blog posts use a lighter version of the same pattern — no mandatory image,
+just a title, date, and Markdown body.
 
 ## Adding a new entry
 
 Every entry is one Markdown file. Pick the right folder:
 
-| Section              | Folder                                    |
-| --------------------- | ------------------------------------------ |
-| Digital → Photography | `src/content/digital-work/photography/`   |
-| Digital → Digital Media | `src/content/digital-work/digital-media/` |
-| Physical Work         | `src/content/physical-work/`              |
-| E-Learning             | `src/content/elearning/`                  |
+| Section              | Folder                                    | Page URL |
+| --------------------- | ------------------------------------------ | -------- |
+| Digital → Photography | `src/content/digital-work/photography/`   | `/digital-work/photography/<slug>/` |
+| Digital → Digital Media | `src/content/digital-work/digital-media/` | `/digital-work/digital-media/<slug>/` |
+| Digital → E-Learning  | `src/content/elearning/`                  | `/digital-work/elearning/<slug>/` |
+| Physical Work         | `src/content/physical-work/`              | `/physical-work/<slug>/` |
+
+Note E-Learning's content folder is still `src/content/elearning/` (unchanged,
+so no files needed to move), but its page now lives under
+`/digital-work/elearning/` since it's a Digital Work subsection — that's
+handled by the routes in `src/pages/digital-work/elearning/`, not by the
+content folder location. New entries in any of these four collections also
+automatically show up on `/portfolio/all-works/`, no extra step needed.
 
 Copy an existing `.md` file in that folder (e.g. `example-series.md`) as a
 starting point, rename it, and edit the frontmatter:
@@ -67,9 +81,11 @@ file to `src/assets/`). The filename becomes the page URL, e.g.
 
 Delete an entry by deleting its `.md` file — nothing else needs updating.
 
-### Adding a post
+### Adding a blog post
 
-Same idea, lighter frontmatter. Add a `.md` file to `src/content/posts/`:
+Same idea, lighter frontmatter. Add a `.md` file to `src/content/posts/`
+(the content folder is still named `posts` — only the public URL is
+`/blog/`):
 
 ```md
 ---
@@ -86,7 +102,7 @@ The body of the update, in Markdown.
 ```
 
 `cover` is optional — omit it entirely for a plain text update. Posts are
-sorted newest-first automatically on `/posts/`.
+sorted newest-first automatically on `/blog/`.
 
 ### Editing About / Contact
 
@@ -128,7 +144,12 @@ in `src/data/site.ts` for the homepage reel.
 
 Open `src/data/site.ts` to change your name, tagline, about text, homepage
 reel video, homepage profile photo, email, and social links.
-Section/subsection titles and descriptions also live there.
+Section/subsection titles, descriptions, and images all live in the
+`sections` array there — this feeds the homepage cards, `/portfolio/`, and
+`/digital-work/`. The "All Works" card's title/description is also there,
+as `allWorksCard` (edit it once, it updates on the homepage, `/portfolio/`,
+and the All Works page itself). "Blog" is the only nav item still hardcoded
+directly in `src/components/Header.astro`, since it isn't a directory card.
 
 ### Homepage profile photo
 
@@ -138,16 +159,19 @@ Drop your photo directly in `src/assets/` (any format — `.jpg`, `.png`,
 auto-optimizes it at build time. Set `profileImage: ''` to hide it
 entirely. It's shown large, to the left of your name on the homepage.
 
-### Homepage section card photos
+### Section card photos
 
-The three "Portfolio" cards on the homepage (Digital Work, Physical Work,
-E-Learning) can show a background photo instead of a plain white card.
-Same convention as the profile photo: drop the file directly in
-`src/assets/`, then set `image: 'filename.jpg'` on that section in the
-`sections` array in `src/data/site.ts`. Omit `image` to keep a plain card.
-Title/description text is white with a dark gradient behind it for
-legibility — pick photos where the *bottom* portion isn't already very
-busy/light, since that's where the gradient is strongest.
+The "Digital Work" and "Physical Work" cards (shown on the homepage and on
+`/portfolio/`), plus each Digital Work subsection card (Photography, Digital
+Media, E-Learning, shown on `/digital-work/`), can show a background photo
+instead of a plain white card. Same convention as the profile photo: drop
+the file directly in `src/assets/`, then set `image: 'filename.jpg'` on
+that section or subsection in the `sections` array in `src/data/site.ts`.
+Omit `image` to keep a plain card (the homepage/`/portfolio/`'s "All Works"
+card is always plain, since it isn't tied to one specific photo). Title/
+description text is white with a dark gradient behind it for legibility —
+pick photos where the *bottom* portion isn't already very busy/light, since
+that's where the gradient is strongest.
 
 ### Background gradient & frosted page card
 
