@@ -1,7 +1,7 @@
 ---
 title: "Philosophy of Instructional Technology and Design"
 date: 2026-09-19
-summary: "My thoughts about ITD"
+summary: "My thoughts about ITD."
 tags: ["e-learning", "ITD"]
 ---
 
