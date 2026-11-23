@@ -79,7 +79,7 @@ body {
      the header/footer's own opaque surface) on top of this, so text always
      has a solid, high-contrast background regardless of where the gradient
      currently is. */
-  background: linear-gradient(185deg, #0075a2, #96E6B3);
+  background: linear-gradient(185deg, #0075a2, #D1E3DD);
   background-size: 400% 400%;
   animation: bg-pan 18s ease infinite;
 }
