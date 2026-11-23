@@ -3,6 +3,10 @@
 Static portfolio built with [Astro](https://astro.build). Deployed for free
 on GitHub Pages, served from your own domain (`jiharvey.com`).
 
+> Just need to know *which file* to edit for a given bit of content? See
+> [CONTENT-MAP.md](./CONTENT-MAP.md) — it's a one-page lookup table. This
+> guide is the longer-form "how to" reference.
+
 ## Site structure
 
 - **Home** (`/`) — about blurb, optional video reel, links into Portfolio.
@@ -153,22 +157,24 @@ directly in `src/components/Header.astro`, since it isn't a directory card.
 
 ### Homepage profile photo
 
-Drop your photo directly in `src/assets/` (any format — `.jpg`, `.png`,
-`.webp` — not a subfolder), then set `site.profileImage` in
-`src/data/site.ts` to just the filename, e.g. `'me.jpg'`. Astro
-auto-optimizes it at build time. Set `profileImage: ''` to hide it
-entirely. It's shown large, to the left of your name on the homepage.
+Drop your photo in `src/assets/site/` (any format — `.jpg`, `.png`,
+`.webp`), then set `site.profileImage` in `src/data/site.ts` to its path
+relative to `src/assets/`, e.g. `'site/me.jpg'`. Astro auto-optimizes it at
+build time. Set `profileImage: ''` to hide it entirely. It's shown to the
+left of your name on both the homepage and the About page.
 
 ### Section card photos
 
 The "Digital Work" and "Physical Work" cards (shown on the homepage and on
 `/portfolio/`), plus each Digital Work subsection card (Photography, Digital
 Media, E-Learning, shown on `/digital-work/`), can show a background photo
-instead of a plain white card. Same convention as the profile photo: drop
-the file directly in `src/assets/`, then set `image: 'filename.jpg'` on
-that section or subsection in the `sections` array in `src/data/site.ts`.
-Omit `image` to keep a plain card (the homepage/`/portfolio/`'s "All Works"
-card is always plain, since it isn't tied to one specific photo). Title/
+instead of a plain white card. Same convention as the profile photo: put
+the file in that category's folder under `src/assets/`, then set `image:`
+to its path relative to `src/assets/` — e.g.
+`image: 'physical-work/green-guy.jpg'` — on that section or subsection in
+the `sections` array in `src/data/site.ts`. See CONTENT-MAP.md §6 for the
+folder layout. Omit `image` to keep a plain card (the homepage/`/portfolio/`'s
+"All Works" card is always plain, since it isn't tied to one specific photo). Title/
 description text is white with a dark gradient behind it for legibility —
 pick photos where the *bottom* portion isn't already very busy/light, since
 that's where the gradient is strongest.

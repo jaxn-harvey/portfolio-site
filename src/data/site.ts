@@ -6,10 +6,10 @@ export const site = {
   // YouTube video ID for the homepage reel, e.g. "dQw4w9WgXcQ" from
   // https://www.youtube.com/watch?v=dQw4w9WgXcQ. Leave empty to hide the reel.
   reelYoutubeId: 'QP88qt2hum8',
-  // Homepage profile photo. Just the filename — the file must live directly
-  // in src/assets/ (not a subfolder). Astro optimizes it automatically at
-  // build time. Set to '' to hide it.
-  profileImage: 'jharvey2.jpeg',
+  // Homepage/About profile photo. Path relative to src/assets/ (include the
+  // subfolder). Astro optimizes it automatically at build time. Set to '' to
+  // hide it. See CONTENT-MAP.md for which folder images belong in.
+  profileImage: 'site/jharvey2.jpeg',
   email: 'jacksonian.era23@gmail.com',
   // `icon` is optional — matches a key in src/components/SocialIcon.astro.
   // Omit it to show just the text label, no icon.
@@ -34,9 +34,9 @@ export type Section = {
   title: string;
   description: string;
   href: string;
-  // Background photo for the homepage/Portfolio directory card. Filename
-  // only — the file must live directly in src/assets/ (not a subfolder),
-  // same as profileImage above. Omit to fall back to a plain card.
+  // Background photo for the homepage/Portfolio directory card. Path
+  // relative to src/assets/, including the subfolder (e.g.
+  // 'physical-work/green-guy.jpg'). Omit to fall back to a plain card.
   image?: string;
   subsections?: Subsection[];
 };
@@ -58,7 +58,7 @@ export const sections: Section[] = [
     title: 'Digital Work',
     description: 'Browse a category.',
     href: '/digital-work/',
-    image: 'Autumn_Morning_Owl (1).png',
+    image: 'digital-work/Autumn_Morning_Owl (1).png',
     subsections: [
       {
         slug: 'photography',
@@ -77,7 +77,7 @@ export const sections: Section[] = [
         title: 'E-Learning',
         description: 'Instructional design and educational technology.',
         href: '/digital-work/elearning/',
-        image: 'Instructional Media History Timeline.jpg',
+        image: 'elearning/Instructional Media History Timeline.jpg',
       },
     ],
   },
@@ -86,6 +86,6 @@ export const sections: Section[] = [
     title: 'Physical Work',
     description: 'Traditional and material-based projects.',
     href: '/physical-work/',
-    image: 'green-guy.jpg',
+    image: 'physical-work/green-guy.jpg',
   },
 ];

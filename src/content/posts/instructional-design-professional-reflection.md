@@ -3,7 +3,7 @@ title: "Instructional Design Professional Reflection"
 date: 2026-10-04
 summary: "A review of my beginnings as an instructional designer."
 tags: ["e-learning", "ITD"]
-cover: ../../assets/bosh-ar-img.jpg
+cover: ../../assets/posts/bosh-ar-img.jpg
 ---
 
 <!--This is a sample post. Posts are simpler than portfolio entries — just a

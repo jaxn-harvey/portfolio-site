@@ -1,9 +1,8 @@
 # Jackson Harvey — Portfolio Site
 
 Personal portfolio site for Jackson Harvey, showcasing digital work
-(photography and digital media), physical/material-based work, and
-e-learning/instructional design projects, plus a simple blog-style Posts
-section.
+(photography, digital media, and e-learning/instructional design) and
+physical/material-based work, plus a blog.
 
 Live at [jiharvey.com](https://jiharvey.com).
 
@@ -21,6 +20,9 @@ Then open http://localhost:4321.
 
 ## Where to look
 
+- **[CONTENT-MAP.md](./CONTENT-MAP.md)** — the quick lookup: "I want to
+  add/change/delete X — which file?" Covers every section, page, card
+  thumbnail, and image location. Start here for day-to-day content edits.
 - **[GUIDE.md](./GUIDE.md)** — the full maintenance guide: adding new
   portfolio entries and posts, editing site-wide text/images, how the
   background/glass-card styling works, local development, deployment, and

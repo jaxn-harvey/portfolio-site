@@ -5,6 +5,12 @@ is, and what's changed. It gets updated whenever a change is made — new
 entries added, and older entries corrected if a later change makes them
 inaccurate (this is a current-state log, not just an append-only history).
 
+**Companion docs that must also be kept current:**
+- `CONTENT-MAP.md` — the "which file do I edit for X" lookup. **Any change
+  to site structure (new section, renamed route, moved folder, new card
+  thumbnail location) must update it in the same change.**
+- `GUIDE.md` — long-form how-to (frontmatter, deployment, DNS, styling).
+
 ## Goals
 
 - Personal portfolio site, hosted for (mostly) free.
@@ -84,6 +90,44 @@ already used). `Header.astro`'s active-state logic treats any path under
 `/portfolio/`, `/digital-work/`, or `/physical-work/` as "Portfolio active."
 
 ## Change log
+
+### 2026-11-23 — Asset folders reorganized; gradient → navy
+- Background gradient's second stop is now `#1A1B41` (deep navy), was
+  `#2e282a` → `#96E6B3` → `#D1E3DD` over a few iterations this session.
+- **Every image now lives in a folder matching what it belongs to**; nothing
+  sits loose in `src/assets/` root anymore. Added `src/assets/site/`
+  (profile photo) and `src/assets/posts/` (blog images); section card
+  thumbnails moved into their category folders (`digital-work/`,
+  `elearning/`, `physical-work/`). All moves done with `git mv` so history
+  is preserved.
+- `resolveAsset()`'s glob widened from `/src/assets/*` to `/src/assets/**`
+  so it can see into subfolders. **Consequence**: `site.ts` image values are
+  now paths relative to `src/assets/` including the subfolder
+  (`'site/jharvey2.jpeg'`), not bare filenames.
+- Rewrote every reference: 4 in `site.ts`, 1 blog post's `cover:`, plus the
+  convention comments in `site.ts`, `GUIDE.md`, and `CONTENT-MAP.md`.
+- Verified no broken links by loading every affected page in a browser and
+  asserting each `<img>` actually decoded (`naturalWidth > 0`), not just
+  that the build passed — `resolveAsset()` returns `undefined` silently on a
+  bad path, so a green build proves nothing on its own. Note for future
+  checks: Astro's **dev** image endpoint transforms on first request and can
+  take 1–2s, so a naive immediate check reports false "broken" images; wait
+  for them, and exclude the lightbox's intentional `src=""` placeholder.
+- No change needed for multi-image entries — the `gallery` frontmatter field
+  already supported unlimited extra images with a scroll strip + lightbox.
+  Now documented properly in CONTENT-MAP.md §1.
+
+### 2026-11-23 — Added CONTENT-MAP.md
+- New `CONTENT-MAP.md`: a one-page lookup table mapping "content I want to
+  change" → "file to edit," covering portfolio entries, blog, homepage,
+  standalone pages, section cards/thumbnails, and site chrome. Linked from
+  `README.md` and `GUIDE.md`.
+- Written because the three-way split between content folders, page routes,
+  and `site.ts` isn't guessable — especially the two deliberate mismatches
+  (`src/content/elearning/` → `/digital-work/elearning/`, and
+  `src/content/posts/` → `/blog/`), both called out explicitly in the map.
+- **This file must be updated alongside any structural change.** Noted at
+  the top of this doc as well.
 
 ### 2026-09-21 — Consolidated "All Works" card text
 - Bug (from the IA restructuring below): the "All Works" card's title/
