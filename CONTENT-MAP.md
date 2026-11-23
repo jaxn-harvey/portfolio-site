@@ -44,6 +44,20 @@ Omit `gallery` entirely for a single-image entry. There's no limit on how
 many you list. (An entry using a `video` shows the video instead of the
 cover; the gallery still appears below it.)
 
+**How images get cropped (or don't):**
+
+| Where | Cropped? |
+| --- | --- |
+| Grid/card thumbnails | Yes — cropped to a consistent shape so the grid stays tidy |
+| Gallery strip previews | Yes — cropped to 4:3, click to open full |
+| **Detail-page cover** | **No** — full frame, native aspect ratio |
+| **Lightbox** | **No** — full frame, fits the viewport |
+
+So the small previews are cropped for layout consistency, but any image a
+visitor actually opens is shown whole. Very tall portraits are capped at
+80% of screen height so they don't run the length of the page — still
+uncropped, just scaled down and centred.
+
 ⚠️ E-Learning is the one mismatch: its folder is `src/content/elearning/`
 (not under `digital-work/`) even though its page sits under
 `/digital-work/elearning/`. Historical — the folder never moved when the

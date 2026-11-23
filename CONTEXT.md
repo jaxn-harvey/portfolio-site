@@ -91,6 +91,31 @@ already used). `Header.astro`'s active-state logic treats any path under
 
 ## Change log
 
+### 2026-11-23 — Detail-page covers no longer cropped; Ireland/UK photos added
+- Bug: `EntryLayout`/`PostLayout` rendered covers with `width={1200}
+  height={675}`, which makes Astro crop to 16:9 regardless of the source.
+  Verified concretely: a 2686x1940 source (aspect 1.385) was being emitted
+  at 1200x675 (1.778) — roughly 22% of the frame cut off top and bottom.
+- Fix: covers now specify `width={1600}` only, so Astro derives height from
+  the source and preserves the native aspect. `.entry-cover` CSS switched to
+  `max-width:100% / max-height:80vh / width:auto / height:auto` + centred —
+  landscape fills the column, tall portraits scale down to fit the viewport
+  instead of running the page length, neither gets cropped. Also means small
+  sources are no longer upscaled (sharper, but they render narrower than the
+  column — intentional).
+- Thumbnails (grid cards, gallery strip) deliberately still crop — they need
+  a consistent shape for layout. The lightbox was already uncropped.
+- Added 32 photos to `src/assets/digital-work/photography/ireland-uk-2025/`,
+  resized from originals in `~/Downloads/Photography` (374 MB -> 34 MB, 91%
+  smaller). Long edge capped at 2400px (above the 1800px the lightbox
+  requests), quality 85 mozjpeg with 4:4:4 chroma; files already <=2400px
+  were copied byte-for-byte rather than re-encoded. No crops, no colour
+  changes; originals untouched. None carried GPS.
+- **Open question for the user**: ~10 of those 32 (`DSCF3657`–`DSCF3675`)
+  are studio product shots of a ceramic dish, not Ireland/UK travel photos,
+  and may belong under Physical Work instead. Two near-duplicate pairs also
+  flagged (`DSCF2355`, `DSCF3657` each have an `_edited` variant).
+
 ### 2026-11-23 — Asset folders reorganized; gradient → navy
 - Background gradient's second stop is now `#1A1B41` (deep navy), was
   `#2e282a` → `#96E6B3` → `#D1E3DD` over a few iterations this session.

@@ -702,9 +702,18 @@ main {
   max-width: 820px;
 }
 
+/* Detail-page cover: never cropped. The image keeps its native aspect
+   ratio and shrinks to fit whichever constraint binds first — the column
+   width for landscape shots, or the viewport height for tall portraits,
+   which would otherwise run the length of the page. Centred, so a narrow
+   portrait doesn't sit awkwardly against the left edge. */
 .entry-cover {
-  width: 100%;
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
   height: auto;
+  margin-inline: auto;
   border-radius: var(--radius);
   box-shadow: var(--shadow-card);
 }
