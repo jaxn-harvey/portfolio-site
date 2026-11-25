@@ -5,6 +5,9 @@ date: 2024-09-01
 dateLabel: "Fall 2024"
 cover: "../../../assets/digital-work/digital-media/termites-cards.jpg"
 coverAlt: "Playing cards with cartoon termite characters"
+gallery:
+  - src: "../../../assets/digital-work/digital-media/termite-king.jpg"
+  - src: "../../../assets/digital-work/digital-media/termite-cover.jpg"
 tags: ["print", "illustration"]
 # To feature a video instead of the static cover on the detail page, uncomment
 # and set a real YouTube video ID (the part after "v=" in a YouTube URL):

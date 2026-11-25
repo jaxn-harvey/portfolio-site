@@ -1,5 +1,5 @@
 ---
-title: "Ireland + UK Study Abroad | Summer 2025"
+title: "Ireland & UK Study Abroad"
 summary: "Photographs from my UNA group trip to Dublin, Edinburgh, and London."
 # Optional — overrides the displayed date with any text you want (`date`
 # above still controls sort order, so keep it set to a real/approximate date):
