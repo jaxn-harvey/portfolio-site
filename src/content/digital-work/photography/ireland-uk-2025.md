@@ -1,6 +1,7 @@
 ---
 title: "Ireland & UK Study Abroad"
 summary: "Photographs from my UNA group trip to Dublin, Edinburgh, and London."
+date: 2025-05-29
 # Optional — overrides the displayed date with any text you want (`date`
 # above still controls sort order, so keep it set to a real/approximate date):
 dateLabel: "Summer 2025"

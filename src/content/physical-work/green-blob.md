@@ -1,5 +1,6 @@
 ---
 title: "Green Blob Baby 3D Print"
+date: 2026-03-01
 dateLabel: Spring 2025
 cover: "../../assets/physical-work/green-guy.jpg"
 coverAlt: "3D-printed figurine of a green character in a high chair with a birthday cake and a party hat."

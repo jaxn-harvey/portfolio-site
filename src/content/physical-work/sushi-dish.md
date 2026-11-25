@@ -1,5 +1,6 @@
 ---
 title: "Glazed Ceramic Sushi Dish"
+date: 2026-02-15
 dateLabel: "Spring 2024"
 cover: "../../assets/physical-work/sushi-dish/DSCF3657_edited.jpg"
 gallery:
