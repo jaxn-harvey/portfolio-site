@@ -24,8 +24,7 @@ gallery:
   - src: "../../../assets/digital-work/photography/ireland-uk-2025/DSCF2618.jpg"
   - src: "../../../assets/digital-work/photography/ireland-uk-2025/DSCF3110.jpg"
   - src: "../../../assets/digital-work/photography/ireland-uk-2025/DSCF3355.jpg"
-tags: ["film", "portrait"]
-featured: true
+tags: ["study abroad", "2025"]
 ---
 
 These photos were shot on a Fujifilm XT-3 camera and 18-55mm lens.

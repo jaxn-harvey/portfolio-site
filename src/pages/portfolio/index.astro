@@ -12,7 +12,12 @@ import { resolveAsset } from '../../utils/images';
     <p>View all projects or browse by category.</p>
 
     <div class="card-grid">
-      <DirectoryCard href={allWorksCard.href} title={allWorksCard.title} description={allWorksCard.description} />
+      <DirectoryCard
+        href={allWorksCard.href}
+        title={allWorksCard.title}
+        description={allWorksCard.description}
+        image={resolveAsset(allWorksCard.image)}
+      />
       {sections.map((s) => (
         <DirectoryCard href={s.href} title={s.title} description={s.description} image={resolveAsset(s.image)} />
       ))}

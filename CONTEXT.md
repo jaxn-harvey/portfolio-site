@@ -91,6 +91,38 @@ already used). `Header.astro`'s active-state logic treats any path under
 
 ## Change log
 
+### 2026-11-25 — Thumbnail paths fixed; resolveAsset now fails loudly
+- Three `image:` values in `site.ts` were missing a subfolder, so those
+  cards rendered blank: `physical-work/DSCF3657_edited.jpg` (actually under
+  `sushi-dish/`), `DSCF2355_edited.jpg` (under
+  `digital-work/photography/ireland-uk-2025/`), and
+  `digital-work/termites-cards.jpg` (under `digital-media/`).
+- Separately, `allWorksCard.image` was never passed to `DirectoryCard` on
+  either the homepage or `/portfolio/` — so that thumbnail couldn't have
+  shown regardless of path. Now wired through in both.
+- Root cause fix: `resolveAsset()` returned `undefined` on an unresolvable
+  path, silently producing a blank card. CONTENT-MAP even documented that
+  as a gotcha — a sign the design was wrong. It now throws at build time
+  with the attempted path and a "did you mean" list of same-named files
+  elsewhere (most mistakes are the folder, not the filename). Verified by
+  deliberately breaking a path: the error correctly suggested
+  `digital-work/digital-media/termites-cards.jpg`.
+  Passing no path at all still returns undefined — omitting `image` is
+  legitimate and means "plain card".
+
+### 2026-11-25 — Removed dead `featured` flag; documented `draft`
+- Deleted `featured` from the entry schema and the two entries that set it.
+  It came from the original scaffold and was never read by any component,
+  layout, or page — a knob that looked functional but did nothing.
+- The show/hide capability the user asked for already existed as `draft`,
+  it just wasn't documented. Verified it end-to-end rather than trusting
+  the code read: with `draft: true` the entry appears in **zero** built
+  files and its detail page isn't generated (so no direct-URL access);
+  flipping to `false` brought it back in listings, All Works, and as a
+  page. Page count 22 ↔ 23 confirmed the test wasn't a no-op.
+- Now documented in CONTENT-MAP.md — it's useless if undiscoverable, which
+  is how `featured` ended up being set on entries in the first place.
+
 ### 2026-11-24 — Gallery: row grid → masonry
 - The row-based grid left dead space under shorter images whenever one
   image in a row was taller (the near-square crop in ireland-uk-2025 made

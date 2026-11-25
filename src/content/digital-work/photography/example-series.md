@@ -13,7 +13,7 @@ gallery:
   - src: "../../../assets/digital-work/photography/example-gallery-2.svg"
     alt: "Placeholder gallery image two"
 tags: ["film", "portrait"]
-featured: true
+draft: true
 ---
 
 Write the full description of this entry here in Markdown. This can be as

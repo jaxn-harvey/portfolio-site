@@ -64,6 +64,19 @@ still uncropped, just scaled down and centred.
 height={…}` pair on its `<Image>` — specifying **both** makes Astro crop to
 that ratio. Specify width only and it keeps the source's proportions.
 
+### Hiding a work-in-progress
+
+Add `draft: true` to any entry or blog post:
+
+```yaml
+draft: true
+```
+
+It disappears from every listing, from All Works, **and** its page isn't
+generated at all — so it's unreachable even if someone guesses the URL.
+The file stays in the repo so you can keep working on it. Delete the line
+(or set `false`) to publish.
+
 ### Optional fields
 
 Only `title` and `cover` are required (blog posts need just `title`).
@@ -167,8 +180,12 @@ everywhere that card appears.
 | Photography / Digital Media | their own folders | `'digital-work/photography/x.jpg'` |
 | Profile photo | `src/assets/site/` | `'site/jharvey2.jpeg'` |
 
-Omit `image` for a plain white card. If a thumbnail silently disappears,
-the path is wrong — `resolveAsset()` fails quietly rather than erroring.
+Omit `image` for a plain white card.
+
+The path must include **every** subfolder — `physical-work/sushi-dish/x.jpg`,
+not `physical-work/x.jpg`. Get it wrong and the build fails with the bad
+path and a "did you mean" suggestion, so you'll know immediately rather
+than wondering why a card looks blank.
 
 ---
 

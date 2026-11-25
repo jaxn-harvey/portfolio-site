@@ -50,6 +50,7 @@ export const allWorksCard = {
   title: 'All Works',
   description: 'Every project in one place.',
   href: '/portfolio/all-works/',
+  image: 'physical-work/sushi-dish/DSCF3657_edited.jpg',
 };
 
 export const sections: Section[] = [
@@ -65,12 +66,14 @@ export const sections: Section[] = [
         title: 'Photography',
         description: 'Various photographic works.',
         href: '/digital-work/photography/',
+        image: 'digital-work/photography/ireland-uk-2025/DSCF2577.jpg',
       },
       {
         slug: 'digital-media',
         title: 'Digital Media',
         description: 'Animation, 3D, illustration, and more.',
         href: '/digital-work/digital-media/',
+        image: 'digital-work/digital-media/termites-cards.jpg',
       },
       {
         slug: 'elearning',

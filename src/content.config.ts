@@ -76,7 +76,9 @@ const entrySchema = ({ image }: { image: () => z.ZodType<any> }) =>
       )
       .default([]),
     tags: z.array(z.string()).default([]),
-    featured: z.boolean().default(false),
+    // Set `draft: true` to hide an entry: it's excluded from every listing
+    // and its detail page isn't generated at all, so it's unreachable even
+    // by direct URL. Omit it (or set false) and the entry is live.
     draft: z.boolean().default(false),
   });
 

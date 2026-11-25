@@ -5,6 +5,7 @@ date: 2026-01-20
 cover: "../../assets/physical-work/example-cover.svg"
 coverAlt: "Placeholder cover image for an example physical project"
 tags: ["woodworking", "prototype"]
+draft: true
 ---
 
 Describe the physical project here: materials, techniques, and process.
