@@ -26,7 +26,7 @@ const fullSize = await Promise.all(
     <div class="gallery">
       {images.map((img, i) => (
         <button class="gallery__item" type="button" data-index={i} aria-label={`Open image: ${img.alt || 'untitled'}`}>
-          <Image src={img.src} alt={img.alt} width={400} height={300} loading="lazy" />
+          <Image src={img.src} alt={img.alt} width={600} loading="lazy" />
         </button>
       ))}
     </div>

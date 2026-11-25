@@ -633,44 +633,37 @@ main {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* ---------- Image gallery (horizontal scroll) ---------- */
+/* ---------- Image gallery (grid) ---------- */
+/* Masonry, Pinterest-style. A row-based grid leaves dead space under the
+   shorter images whenever one image in the row is taller; CSS multi-column
+   instead flows each image into the shortest column, so images of mixed
+   heights pack tightly with no gaps. Note this makes reading order run
+   top-to-bottom down each column, rather than left-to-right across rows. */
 .gallery {
-  display: flex;
-  gap: var(--space-2);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
+  columns: 3 220px;
+  column-gap: var(--space-2);
   margin-top: var(--space-3);
-  padding-bottom: var(--space-2);
-  scrollbar-width: thin;
-}
-
-.gallery::-webkit-scrollbar {
-  height: 8px;
-}
-
-.gallery::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 999px;
 }
 
 .gallery__item {
-  flex: 0 0 auto;
-  width: 260px;
+  display: block;
+  width: 100%;
+  /* column-gap only spaces columns horizontally; vertical spacing between
+     stacked images has to come from the items themselves. */
+  margin-bottom: var(--space-2);
+  break-inside: avoid; /* don't split an image across two columns */
   border: 0;
   background: none;
   padding: 0;
   cursor: zoom-in;
   border-radius: var(--radius);
   overflow: hidden;
-  aspect-ratio: 4 / 3;
-  scroll-snap-align: start;
 }
 
 .gallery__item img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto; /* native aspect ratio — no cropping */
   transition: transform var(--transition-medium);
 }
 

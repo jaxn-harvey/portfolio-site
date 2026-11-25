@@ -91,6 +91,75 @@ already used). `Header.astro`'s active-state logic treats any path under
 
 ## Change log
 
+### 2026-11-24 — Gallery: row grid → masonry
+- The row-based grid left dead space under shorter images whenever one
+  image in a row was taller (the near-square crop in ireland-uk-2025 made
+  this obvious). Switched `.gallery` to CSS multi-column
+  (`columns: 3 220px`), which flows each image into the shortest column —
+  Pinterest-style packing, no gaps, still uncropped.
+- Gotchas baked into the CSS: `column-gap` only spaces columns
+  horizontally, so vertical spacing comes from `margin-bottom` on the
+  items; and `break-inside: avoid` stops an image splitting across columns.
+- **Trade-off accepted**: multi-column reads top-to-bottom down each column
+  rather than left-to-right across rows. Fine for a photo set; worth
+  revisiting if an entry ever needs strict sequential ordering. (CSS Grid's
+  native `masonry` would preserve row order but isn't broadly supported.)
+- Verified by grouping items into columns and measuring the vertical gap
+  between consecutive items: every gap is exactly 16px at 1400/800/390px —
+  a single distinct value, which is what proves the dead space is gone.
+
+### 2026-11-24 — Gallery: horizontal scroll → uncropped grid
+- Gallery on project pages is now a responsive grid
+  (`repeat(auto-fill, minmax(220px, 1fr))`) instead of a horizontal scroll
+  strip. 3-up at desktop width, 1-up on mobile.
+- Images in it are no longer cropped. This needed fixes at **two** layers,
+  which is the thing to remember: CSS alone wasn't enough because
+  `ImageGallery.astro` rendered thumbs with `width={400} height={300}`, and
+  specifying both dimensions makes Astro crop the *generated file* to that
+  ratio. Changed to `width={600}` only, then dropped `aspect-ratio` from
+  `.gallery__item` and `object-fit: cover` from its `img`.
+  (Same root cause as the cover-cropping fix earlier the same day.)
+- `.gallery` uses `align-items: start` so a tall image doesn't stretch its
+  shorter row-mates; mixed portrait/landscape sit together cleanly.
+- Verified by asserting every gallery image's *rendered* box aspect matches
+  its *natural* aspect within 0.02 — zero mismatches at both 1400px and
+  390px. Checking the screenshot alone wouldn't catch subtle squashing.
+
+### 2026-11-24 — `date` optional too; date logic centralized
+- `date` is now optional on both schemas (`dateLabel` already was). Only
+  `title` + `cover` remain required for entries, `title` for posts.
+- Undated entries **sort to the end** of listings rather than disappearing
+  or throwing. Dated ones keep sorting newest-first.
+- Six listing pages each had their own copy of the sort, and three places
+  formatted dates independently — with `date` now nullable, that's six
+  chances to miss a null guard. Extracted `byNewestFirst()` and
+  `formatDate()` into `src/utils/entries.ts` and pointed everything at them.
+  `formatDate` also keeps the `timeZone: 'UTC'` pin in one place; that pin
+  fixes an off-by-one-day bug and must not be removed.
+- Blog list falls back to a plain `<span>` when a post has `dateLabel` but
+  no `date`, since `<time datetime>` requires a machine-readable value.
+- Verified all four permutations (no date, date only, dateLabel only, both)
+  with throwaway entries — checked rendered HTML for empty elements and
+  confirmed sort placement — then removed them.
+
+### 2026-11-24 — `summary` optional; bad dates now fail loudly
+- `summary` on portfolio entries was required; now optional (posts already
+  were). `EntryCard` and `EntryLayout` only render it when present, so
+  omitting the line leaves no empty element or gap. Meta description falls
+  back to the title.
+- Replaced `z.coerce.date()` with a validating `sortableDate` field.
+  `z.coerce.date()` silently turned `"Fall 2023"` into 1 Jan 2023 and an
+  empty `date:` into 1 Jan 1970 — wrong but *valid* dates, so builds passed
+  and entries just sorted/displayed incorrectly. It now rejects anything
+  that isn't ISO-shaped, naming the file and pointing at `dateLabel`.
+  This had bitten the user twice (termite-cards, cloth-chair-sketch), which
+  is why it became a guard rather than another one-off fix.
+- Fixed both affected entries: `cloth-chair-sketch` (`"Fall 2023"` →
+  `date: 2023-09-01` + `dateLabel`), `termite-cards` (empty date →
+  `2024-09-01`; it already had the dateLabel).
+- Verified the no-summary path with a throwaway entry (built, inspected
+  HTML for stray empty `<p>`, removed) rather than assuming.
+
 ### 2026-11-23 — Detail-page covers no longer cropped; Ireland/UK photos added
 - Bug: `EntryLayout`/`PostLayout` rendered covers with `width={1200}
   height={675}`, which makes Astro crop to 16:9 regardless of the source.

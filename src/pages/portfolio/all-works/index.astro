@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import EntryCard from '../../../components/EntryCard.astro';
 import { allWorksCard } from '../../../data/site';
+import { byNewestFirst } from '../../../utils/entries';
 
 // Every portfolio collection, and where its entries live once built —
 // combined here into one date-sorted feed. Posts (the blog) intentionally
@@ -23,7 +24,7 @@ const allEntries = (
   )
 ).flat();
 
-allEntries.sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
+allEntries.sort((a, b) => byNewestFirst(a.entry.data.date, b.entry.data.date));
 ---
 
 <BaseLayout title={allWorksCard.title} description={allWorksCard.description}>

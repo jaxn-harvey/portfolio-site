@@ -3,11 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EntryCard from '../../components/EntryCard.astro';
 import { sections } from '../../data/site';
+import { byNewestFirst } from '../../utils/entries';
 
 const section = sections.find((s) => s.slug === 'physical-work')!;
 
 const entries = (await getCollection('physical-work', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) => byNewestFirst(a.data.date, b.data.date),
 );
 ---
 

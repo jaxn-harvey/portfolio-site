@@ -1,7 +1,7 @@
 ---
 title: "Custom Termite Playing Cards"
 summary: "Face cards with medieval-inspired termites"
-date: 
+date: 2024-09-01
 dateLabel: "Fall 2024"
 cover: "../../../assets/digital-work/digital-media/termites-cards.jpg"
 coverAlt: "Playing cards with cartoon termite characters"

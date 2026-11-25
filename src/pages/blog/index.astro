@@ -1,9 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { byNewestFirst, formatDate } from '../../utils/entries';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) => byNewestFirst(a.data.date, b.data.date),
 );
 ---
 
@@ -18,9 +19,19 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
           <li class="post-list__item">
             <a class="post-list__link" href={`/blog/${post.id}/`}>
               <span class="post-list__title">{post.data.title}</span>
-              <time class="post-list__date" datetime={post.data.date.toISOString()}>
-                {post.data.dateLabel ?? post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
-              </time>
+              {(() => {
+                const shown =
+                  post.data.dateLabel ??
+                  formatDate(post.data.date, { year: 'numeric', month: 'long', day: 'numeric' });
+                if (!shown) return null;
+                // <time datetime> needs a machine-readable date; without one,
+                // fall back to a plain span so the markup stays valid.
+                return post.data.date ? (
+                  <time class="post-list__date" datetime={post.data.date.toISOString()}>{shown}</time>
+                ) : (
+                  <span class="post-list__date">{shown}</span>
+                );
+              })()}
             </a>
             {post.data.summary && <p class="post-list__summary">{post.data.summary}</p>}
           </li>

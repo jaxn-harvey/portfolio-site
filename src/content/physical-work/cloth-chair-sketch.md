@@ -1,7 +1,8 @@
 ---
 title: "Cloth on a Chair Charcoal Sketch"
 summary: "Completed in Drawing I."
-date: Fall 2023
+date: 2023-09-01
+dateLabel: "Fall 2023"
 cover: "../../assets/physical-work/cloth-chair-study1.jpg"
 coverAlt: "Sketch of a chair with a large cloth draped over it"
 tags: ["traditional", "charcoal"]

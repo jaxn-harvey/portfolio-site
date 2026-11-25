@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 interface Props {
   href: string;
   title: string;
-  summary: string;
+  summary?: string;
   cover: import('astro').ImageMetadata;
   coverAlt: string;
   tags?: string[];
@@ -19,7 +19,7 @@ const { href, title, summary, cover, coverAlt, tags = [] } = Astro.props;
   </div>
   <div class="card__body">
     <h3 class="card__title">{title}</h3>
-    <p class="card__summary">{summary}</p>
+    {summary && <p class="card__summary">{summary}</p>}
     {tags.length > 0 && (
       <div class="card__tags">
         {tags.map((tag) => <span class="tag">{tag}</span>)}

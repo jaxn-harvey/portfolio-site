@@ -1,6 +1,44 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// A real calendar date, used for sort order on every listing page.
+//
+// Deliberately NOT z.coerce.date(): that quietly turns "Fall 2023" into
+// 1 Jan 2023 and an empty value into 1 Jan 1970 — wrong but *valid* dates,
+// so the build passes and the entry just sorts/displays incorrectly. This
+// fails the build instead, and says what to do about it.
+const sortableDate = z.unknown().transform((value, ctx) => {
+  const fail = (message: string) => {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+    return z.NEVER;
+  };
+
+  // YAML parses an unquoted 2026-05-01 straight into a Date.
+  if (value instanceof Date) {
+    return Number.isNaN(value.valueOf()) ? fail('`date` is not a valid date.') : value;
+  }
+
+  if (value === null || value === undefined || value === '') {
+    return fail('`date` is required — e.g. `date: 2023-09-01`. It drives sort order.');
+  }
+
+  if (typeof value !== 'string') {
+    return fail('`date` must be a calendar date like 2023-09-01.');
+  }
+
+  const trimmed = value.trim();
+  if (!/^\d{4}(-\d{2}){0,2}$/.test(trimmed)) {
+    return fail(
+      `"${trimmed}" is not a calendar date, so it can't be sorted. ` +
+        'Put a real date in `date` and the wording in `dateLabel` — e.g. ' +
+        '`date: 2023-09-01` plus `dateLabel: "Fall 2023"`. Only dateLabel is displayed.',
+    );
+  }
+
+  const parsed = new Date(trimmed);
+  return Number.isNaN(parsed.valueOf()) ? fail(`"${trimmed}" is not a valid date.`) : parsed;
+});
+
 // Shared shape for every "entry module" across every section/subsection.
 // Each entry is a single Markdown file: frontmatter for structured fields,
 // the Markdown body is the long-form description.
@@ -10,12 +48,14 @@ import { glob } from 'astro/loaders';
 const entrySchema = ({ image }: { image: () => z.ZodType<any> }) =>
   z.object({
     title: z.string(),
-    summary: z.string().max(200), // short blurb shown on grid/card view
-    date: z.coerce.date(),
-    // Optional freeform text shown instead of the formatted `date` above,
-    // e.g. "Fall 2024" or "Summer 2023". `date` still drives sort order on
-    // listing pages, so keep it set to a real (approximate is fine) date —
-    // dateLabel only changes what's displayed.
+    // Short blurb shown on the grid card and under the title on the detail
+    // page. Optional — omit the line entirely and both simply don't render.
+    summary: z.string().max(200).optional(),
+    // Both date fields are optional. If you set `date`, it drives sort order
+    // on listing pages (newest first; undated entries sort to the end). If
+    // you set `dateLabel`, that's what's displayed instead of the formatted
+    // date. Set neither and no date shows at all.
+    date: sortableDate.optional(),
     dateLabel: z.string().optional(),
     cover: image(),
     coverAlt: z.string().default(''),
@@ -65,7 +105,7 @@ const elearning = defineCollection({
 const postSchema = ({ image }: { image: () => z.ZodType<any> }) =>
   z.object({
     title: z.string(),
-    date: z.coerce.date(),
+    date: sortableDate.optional(),
     dateLabel: z.string().optional(),
     summary: z.string().max(300).optional(),
     cover: image().optional(),

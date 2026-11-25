@@ -27,8 +27,10 @@ Delete one = delete the file. Nothing else to update.
 ### Multiple images on one entry
 
 Beyond the required `cover` thumbnail, add a `gallery` list for as many
-extra images as you want. They render as a horizontally scrollable strip
-below the cover, and clicking one opens it full-size in a lightbox.
+extra images as you want. They render as a Pinterest-style masonry grid
+below the cover — each at its own aspect ratio, packed without gaps — and
+clicking one opens it full-size in a lightbox. Note masonry reads
+top-to-bottom down each column rather than left-to-right across rows.
 
 ```yaml
 cover: "../../../assets/digital-work/photography/my-cover.jpg"
@@ -48,15 +50,44 @@ cover; the gallery still appears below it.)
 
 | Where | Cropped? |
 | --- | --- |
-| Grid/card thumbnails | Yes — cropped to a consistent shape so the grid stays tidy |
-| Gallery strip previews | Yes — cropped to 4:3, click to open full |
+| Section/entry card thumbnails (listing pages) | Yes — cropped to a consistent shape so the card grid stays tidy |
+| **Gallery grid on a project page** | **No** — each image at its own aspect ratio |
 | **Detail-page cover** | **No** — full frame, native aspect ratio |
 | **Lightbox** | **No** — full frame, fits the viewport |
 
-So the small previews are cropped for layout consistency, but any image a
-visitor actually opens is shown whole. Very tall portraits are capped at
-80% of screen height so they don't run the length of the page — still
-uncropped, just scaled down and centred.
+So only the listing-page cards crop, for layout consistency. Everything on
+the project page itself shows the whole frame. Very tall portraits are
+capped at 80% of screen height so they don't run the length of the page —
+still uncropped, just scaled down and centred.
+
+⚠️ If an image ever looks cropped, check for a hardcoded `width={…}
+height={…}` pair on its `<Image>` — specifying **both** makes Astro crop to
+that ratio. Specify width only and it keeps the source's proportions.
+
+### Optional fields
+
+Only `title` and `cover` are required (blog posts need just `title`).
+Everything else can be left out entirely.
+
+**`summary`** — delete the line and no blurb renders, on either the grid
+card or the detail page. No empty gap left behind.
+
+**`date` and `dateLabel`** — both optional, and they do different jobs:
+
+| You want | Write this |
+| --- | --- |
+| Normal date, shown + sorted | `date: 2023-09-01` |
+| Custom wording like "Fall 2023" | `date: 2023-09-01` **and** `dateLabel: "Fall 2023"` |
+| Wording only, don't care about sort position | `dateLabel: "Fall 2023"` alone |
+| No date shown at all | omit both |
+
+`date` controls **sort order** (newest first). `dateLabel`, if present,
+controls **what's displayed**. Entries with no `date` sort to the end of
+listings — they still appear, just last.
+
+⚠️ `date` must be a real calendar date (`2023-09-01`). Writing
+`date: "Fall 2023"` fails the build with a message telling you to use
+`dateLabel` — it used to silently become January 2023.
 
 ⚠️ E-Learning is the one mismatch: its folder is `src/content/elearning/`
 (not under `digital-work/`) even though its page sits under

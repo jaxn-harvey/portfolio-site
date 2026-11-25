@@ -3,12 +3,13 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import EntryCard from '../../../components/EntryCard.astro';
 import { sections } from '../../../data/site';
+import { byNewestFirst } from '../../../utils/entries';
 
 const digitalWork = sections.find((s) => s.slug === 'digital-work')!;
 const sub = digitalWork.subsections!.find((s) => s.slug === 'elearning')!;
 
 const entries = (await getCollection('elearning', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) => byNewestFirst(a.data.date, b.data.date),
 );
 ---
 
